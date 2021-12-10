@@ -1,0 +1,76 @@
+.main {
+  background-image: url("../images/Active.jpg");
+  background-size: no-repeat;
+  object-fit: cover;
+  top: 0;
+  height: 100vh;
+}
+.App {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  justify-content: center;
+  background-color: #ffff;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  /* margin-top: 50px !important; */
+}
+.Activates {
+  margin: 15px;
+  padding: 20px;
+}
+.label {
+  display: flex;
+  margin: auto;
+  padding: 5px;
+  flex-wrap: wrap;
+}
+.input {
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  outline: none;
+  background-color: rgb(241, 241, 241);
+}
+.input:focus {
+  border-bottom: 2px solid #ff631c;
+}
+.button {
+  border: none;
+  color: white;
+  padding: 8px 10px;
+  text-align: center;
+  text-decoration: none;
+  display: flex;
+  font-size: 16px;
+  width: 100%;
+  margin: auto;
+  cursor: pointer;
+  transition-duration: 0.4s;
+  background-color: #ff631c;
+  color: white;
+  border: 2px solid #ff631c;
+  border-radius: 5px;
+  align-items: center;
+  margin-top: 10px;
+  justify-content: center;
+  align-items: center;
+}
+.button:hover {
+  background-color: white;
+  color: #ff631c;
+}
+
+@media screen and (max-width: 700px) {
+  .App {
+    width: 95%;
+    margin-top: 60px;
+  }
+  h1 {
+    font-size: larger;
+    margin-top: 0;
+  }
+}
