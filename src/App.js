@@ -12,7 +12,7 @@ import AllProducts from './pages/AllProducts';
 import Report from './pages/Report';
 import Orders from './pages/Orders';
 import Reviews from './pages/Reviews';
-
+import Loading from "./pages/Loading";
 
 function App() {
   return (
@@ -24,6 +24,7 @@ function App() {
         <Route path="/activate/:token" exact component={ActivatePage} />
         <Route path="/bank" exact component={Bank} />
         <Route path="/addProducts" exact component={AddProducts} />
+        <Route path="/loading" exact component={Loading} />
         <Route path="/allProducts" exact component={AllProducts} />
         <Route path="/report" exact component={Report} />
         <Route path="/orders" exact component={Orders} />

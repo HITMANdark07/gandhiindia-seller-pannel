@@ -1,25 +1,26 @@
 import React,{useState} from 'react';
 import { NavLink as Link } from "react-router-dom";
 import logo from '../assets/images/logo.png';
-import bars from '../assets/images/bars.svg';
-import products from '../assets/images/products.svg';
-import bank from '../assets/images/bank.svg';
-import addProducts from '../assets/images/addProducts.svg';
-import report from '../assets/images/report.svg';
-import reviews from '../assets/images/reviews.svg';
-import login from '../assets/images/user.svg';
-import register from '../assets/images/userplus.svg';
+import {ReactComponent as Bars} from '../assets/images/bars.svg';
+import {ReactComponent as Products} from '../assets/images/products.svg';
+import {ReactComponent as Bank} from '../assets/images/bank.svg';
+import {ReactComponent as AddProducts} from '../assets/images/addProducts.svg';
+import {ReactComponent as Report} from '../assets/images/report.svg';
+import {ReactComponent as Reviews} from '../assets/images/reviews.svg';
+import {ReactComponent as Login} from '../assets/images/user.svg';
+import {ReactComponent as Register} from '../assets/images/userplus.svg';
 import style from '../assets/css/navbar.module.css';
 import { withRouter } from 'react-router-dom';
 
 const Header = (props) => {
     const [click, setClick] = useState(true);
+    const his = props.history.location.pathname;
     return (
         <div className={style.App}>
             <nav className={style.navbar}>
                 <div className={style.navbarContainer}>
                     <div className={style.navbarLeft}>
-                        <img className={style.menuBars} src={bars} alt="bars" onClick={() => setClick(!click)}/>
+                        <Bars className={style.menuBars} fill="#00000" onClick={() => setClick(!click)} />
                         <Link to='/' className={style.showNavbarLogo}>
                             <img className={style.navbarLogo} src={logo} alt='Logo'/>
                         </Link>
@@ -28,49 +29,49 @@ const Header = (props) => {
                     <div className={style.navbarBtn}>
                         <Link to='/register' className={style.navbarRegister}>
                             <span className={style.navbarRegisterText}>Register</span>
-                            <img className={style.register} src={register} alt='Register'/>
+                            <Register className={style.register} fill="#fff" />
                         </Link>
 
                         <Link to='/login' className={style.navbarLogin}>
                            <span className={style.navbarRegisterText}>Login</span>
-                            <img className={style.login} src={login} alt='Login'/>
+                           <Login className={style.login} fill="#fff" />
                         </Link>
                     </div>
                 </div>
             </nav>
             <div className={click ? style.showSidebar : style.hideSidebar}>
                 <ul className={click ? style.showSidebarMenu : style.hideSidebarMenu}>
-                    <li className={style.menuItem} onClick={() => props.history.push("/addProducts")}>
-                        <img className={style.sidebarIcon} src={addProducts}  alt='Add'/>
-                        <div className={click ? style.showSidebarText : style.hideSidebarText}>
+                    <li className={his==="/addProducts" ? style.menuI:style.menuItem} onClick={() => props.history.push("/addProducts")}>
+                        <AddProducts className={style.sidebarIcon} fill={his==="/addProducts" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/addProducts" ? "#ffffff":"#808080"}}>
                             Add Products
                         </div>
                     </li>
 
-                    <li className={style.menuItem} onClick={() => props.history.push('/allProducts')}>
-                        <img className={style.sidebarIcon} src={products} alt="All" />
-                        <div className={click ? style.showSidebarText : style.hideSidebarText}>
+                    <li className={his==="/allProducts" ? style.menuI:style.menuItem} onClick={() => props.history.push('/allProducts')}>
+                        <Products className={style.sidebarIcon} fill={his==="/allProducts" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/allProducts" ? "#ffffff":"#808080"}}>
                             All Products
                         </div>
                     </li>
                     
-                    <li className={style.menuItem} onClick={() => props.history.push('/bank')}>
-                        <img className={style.sidebarIcon} src={bank} alt="Bank" />
-                        <div className={click ? style.showSidebarText : style.hideSidebarText}>
+                    <li className={his==="/bank" ? style.menuI:style.menuItem} onClick={() => props.history.push('/bank')}>
+                        <Bank className={style.sidebarIcon} fill={his==="/bank" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/bank" ? "#ffffff":"#808080"}}>
                             Bank Details
                         </div>
                     </li>
 
-                    <li className={style.menuItem} onClick={() => props.history.push('/report')}>
-                        <img className={style.sidebarIcon} src={report} alt="Report" />
-                        <div className={click ? style.showSidebarText : style.hideSidebarText}>
+                    <li className={his==="/report" ? style.menuI:style.menuItem} onClick={() => props.history.push('/report')}>
+                        <Report className={style.sidebarIcon} fill={his==="/report" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/report" ? "#ffffff":"#808080"}}>
                             Report
                         </div>
                     </li>
 
-                    <li className={style.menuItem} onClick={() => props.history.push('/reviews')}>
-                        <img className={style.sidebarIcon} src={reviews} alt="Review"/>
-                        <div className={click ? style.showSidebarText : style.hideSidebarText}>
+                    <li className={his==="/reviews" ? style.menuI:style.menuItem} onClick={() => props.history.push('/reviews')}>
+                        <Reviews className={style.sidebarIcon} fill={his==="/reviews" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/reviews" ? "#ffffff":"#808080"}}>
                             Reviews
                         </div>
                     </li>

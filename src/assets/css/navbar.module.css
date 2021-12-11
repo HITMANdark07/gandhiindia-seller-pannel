@@ -203,6 +203,16 @@
     color: white;
     text-emphasis-color: white;
 }
+.menuI{
+    background-color:#ff631c;
+    display: flex;
+    cursor: pointer;
+    flex-direction: row;
+    padding: 1rem;
+    border-radius: 50px;
+    color: white;
+    text-emphasis-color: white;
+}
 
 .sidebarIcon{
     width: 2rem;
