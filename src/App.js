@@ -13,6 +13,8 @@ import Report from './pages/Report';
 import Orders from './pages/Orders';
 import Reviews from './pages/Reviews';
 import Loading from "./pages/Loading";
+import PrivateRoute from "./auth/PrivateRoute";
+import UpdateProduct from './pages/Update-Product';
 
 function App() {
   return (
@@ -22,13 +24,14 @@ function App() {
         <Route path="/register" exact component={Registeration} />
         <Route path="/login" exact component={LoginPage} />
         <Route path="/activate/:token" exact component={ActivatePage} />
-        <Route path="/bank" exact component={Bank} />
-        <Route path="/addProducts" exact component={AddProducts} />
-        <Route path="/loading" exact component={Loading} />
-        <Route path="/allProducts" exact component={AllProducts} />
-        <Route path="/report" exact component={Report} />
-        <Route path="/orders" exact component={Orders} />
-        <Route path="/reviews" exact component={Reviews} /> 
+        <PrivateRoute path="/finance" exact component={Bank} />
+        <PrivateRoute path="/add-products" exact component={AddProducts} />
+        <PrivateRoute path="/loading" exact component={Loading} />
+        <PrivateRoute path="/all-products" exact component={AllProducts} />
+        <PrivateRoute path="/update-product/:productId" exact component={UpdateProduct} />
+        <PrivateRoute path="/report" exact component={Report} />
+        <PrivateRoute path="/orders" exact component={Orders} />
+        <PrivateRoute path="/reviews" exact component={Reviews} /> 
       </Switch>
     </BrowserRouter>
   );

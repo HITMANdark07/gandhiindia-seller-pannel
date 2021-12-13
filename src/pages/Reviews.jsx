@@ -3,7 +3,7 @@ import Header from "../components/Header";
 
 const Reviews = () =>{
     return (<Header>
-        <h1>REVIEWS</h1>
+        <h1 style={{textAlign:"center"}}>YOUR PRODUCTS REVIEW</h1>
     </Header>)
 }
 

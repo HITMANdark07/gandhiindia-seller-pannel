@@ -9,24 +9,45 @@ import {ReactComponent as Report} from '../assets/images/report.svg';
 import {ReactComponent as Reviews} from '../assets/images/reviews.svg';
 import {ReactComponent as Login} from '../assets/images/user.svg';
 import {ReactComponent as Register} from '../assets/images/userplus.svg';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { connect } from 'react-redux';
+import { toggleDrawer } from "../redux/drawer/drawer.action";
 import style from '../assets/css/navbar.module.css';
 import { withRouter } from 'react-router-dom';
+import { isAuthenticated, signout } from '../auth';
 
 const Header = (props) => {
-    const [click, setClick] = useState(true);
+    const [click, setClick] = useState(props.drawer);
     const his = props.history.location.pathname;
     return (
         <div className={style.App}>
             <nav className={style.navbar}>
                 <div className={style.navbarContainer}>
                     <div className={style.navbarLeft}>
-                        <Bars className={style.menuBars} fill="#00000" onClick={() => setClick(!click)} />
+                        <Bars className={style.menuBars} fill="#00000" onClick={() => {
+                            setClick(!click);
+                            props.toggle();
+                        }} />
                         <Link to='/' className={style.showNavbarLogo}>
                             <img className={style.navbarLogo} src={logo} alt='Logo'/>
                         </Link>
                     </div>
 
-                    <div className={style.navbarBtn}>
+                    {isAuthenticated() ? (
+                        <div className={style.navbarBtn}
+                        style={{cursor:"pointer"}}
+                        onClick={() => {
+                            signout(() => {
+                                props.history.push("/login");
+                            })
+                        }}>
+                        <div className={style.navbarRegister}>
+                            <span className={style.navbarRegisterText}>Logout</span>
+                            <LogoutIcon className={style.register} fill="#fff" />
+                        </div>
+                    </div>
+                    ):(
+                        <div className={style.navbarBtn}>
                         <Link to='/register' className={style.navbarRegister}>
                             <span className={style.navbarRegisterText}>Register</span>
                             <Register className={style.register} fill="#fff" />
@@ -37,27 +58,28 @@ const Header = (props) => {
                            <Login className={style.login} fill="#fff" />
                         </Link>
                     </div>
+                    )}
                 </div>
             </nav>
             <div className={click ? style.showSidebar : style.hideSidebar}>
                 <ul className={click ? style.showSidebarMenu : style.hideSidebarMenu}>
-                    <li className={his==="/addProducts" ? style.menuI:style.menuItem} onClick={() => props.history.push("/addProducts")}>
-                        <AddProducts className={style.sidebarIcon} fill={his==="/addProducts" ? "#ffffff":"#808080"} />
-                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/addProducts" ? "#ffffff":"#808080"}}>
+                    <li className={his==="/add-products" ? style.menuI:style.menuItem} onClick={() => props.history.push("/add-products")}>
+                        <AddProducts className={style.sidebarIcon} fill={his==="/add-products" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/add-products" ? "#ffffff":"#808080"}}>
                             Add Products
                         </div>
                     </li>
 
-                    <li className={his==="/allProducts" ? style.menuI:style.menuItem} onClick={() => props.history.push('/allProducts')}>
-                        <Products className={style.sidebarIcon} fill={his==="/allProducts" ? "#ffffff":"#808080"} />
-                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/allProducts" ? "#ffffff":"#808080"}}>
+                    <li className={his==="/all-products" ? style.menuI:style.menuItem} onClick={() => props.history.push('/all-products')}>
+                        <Products className={style.sidebarIcon} fill={his==="/all-products" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/all-products" ? "#ffffff":"#808080"}}>
                             All Products
                         </div>
                     </li>
                     
-                    <li className={his==="/bank" ? style.menuI:style.menuItem} onClick={() => props.history.push('/bank')}>
-                        <Bank className={style.sidebarIcon} fill={his==="/bank" ? "#ffffff":"#808080"} />
-                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/bank" ? "#ffffff":"#808080"}}>
+                    <li className={his==="/finance" ? style.menuI:style.menuItem} onClick={() => props.history.push('/finance')}>
+                        <Bank className={style.sidebarIcon} fill={his==="/finance" ? "#ffffff":"#808080"} />
+                        <div className={click ? style.showSidebarText : style.hideSidebarText} style={{color:his==="/finance" ? "#ffffff":"#808080"}}>
                             Bank Details
                         </div>
                     </li>
@@ -83,5 +105,11 @@ const Header = (props) => {
         </div>
     )
 }
-
-export default withRouter(Header);
+const mapStateToProps = (state) => ({
+    drawer : state.drawer.drawer
+});
+const mapDispathchTorops = (dispatch) => ({
+    toggle: () => dispatch(toggleDrawer())
+})
+ 
+export default connect(mapStateToProps,mapDispathchTorops)(withRouter(Header));

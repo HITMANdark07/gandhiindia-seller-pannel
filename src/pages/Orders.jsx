@@ -4,7 +4,7 @@ import Header from '../components/Header'
 const Orders = () => {
     return (
         <Header>
-            <h1>All Products</h1>
+            <h1 style={{textAlign:"center"}}>MANAGE ORDERS</h1>
         </Header>
     )
 }

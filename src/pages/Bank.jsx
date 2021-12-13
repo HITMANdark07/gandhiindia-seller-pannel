@@ -4,7 +4,7 @@ import Header from '../components/Header'
 const Bank = () => {
     return (
         <Header>
-            <h1>BANk</h1>
+            <h1 style={{textAlign:"center"}}>FINANCE DASHBOARD</h1>
         </Header>
     )
 }

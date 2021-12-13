@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Header from '../components/Header';
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
@@ -9,28 +9,65 @@ import Select from "@mui/material/Select";
 import FormControl from "@mui/material/FormControl";
 import CircularProgress from "@mui/material/CircularProgress";
 import InputLabel from "@mui/material/InputLabel";
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Button, Typography } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import { isAuthenticated } from "../auth/index";
 import makeToast from "../Toaster";
-import { create, getCategories, getSpecificationBySubCategory, getSubCategoriesbyCategory,uploadImages } from '../api/inventory';
+import { updateProduct, getCategories, getProductById, getSpecificationBySubCategory, getSubCategoriesbyCategory,uploadImages } from '../api/inventory';
 import { Redirect } from 'react-router-dom';
 import { API } from '../config';
 import { withRouter } from 'react-router-dom';
 
-const AddProducts = ({history}) => {
+const UpdateProducts = ({history,match:{params:{productId}}}) => {
 
     const [categories, setCategories] = React.useState([]);
     const [subCategories, setSubCategories] = React.useState([]);
-    
-    const getSpecifications = React.useCallback((id) => {
+    const [category, setCategory] = React.useState("");
+    const [subCategory, setSubCategory] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [regPrice, setRegPrice] =React.useState("");
+    const [salePrice, setSalePrice] = React.useState("");
+    const [title, setTitle] = React.useState("");
+    const [quantity, setQuantity] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
+    const [specifications, setSpecifications] = React.useState([]);
+    const [image, setImage] = React.useState([]);
+    const getSpecifications = React.useCallback((id,specs) => {
       getSpecificationBySubCategory(id).then(response => {
         response.forEach((res,idx) => {
           res.options=res.options.split(",");
+          if(specs[idx]){
+            let c = res.options.lastIndexOf(specs[idx].value);
+            if(c>0){
+                let temp = res.options[0];
+                res.options[0] =specs[idx].value;
+                res.options[c] = temp;
+            }
+          }
         })
         setSpecifications(response);
       })
-    },[])
+    },[]);
+    const getPro = useCallback((id) => {
+        getProductById(id).then(response => {
+            if(response._id){
+                setTitle(response.name);
+                setDescription(response.description);
+                setRegPrice(response.mrp);
+                setSalePrice(response.price);
+                setQuantity(response.quantity);
+                setCategory(response.category);
+                setSubCategory(response.subCategory);
+                setImage(response.photo);
+                getSpecifications(response.subCategory,response.specifications);
+            }else{
+                makeToast("error", "Something went Wrong");
+            }
+        }).catch(err => {
+            console.log(err);
+        })
+    },[getSpecifications])
 
     const getSubCategories = React.useCallback((id) => {
       getSubCategoriesbyCategory({category:id}).then(subcat => {
@@ -40,12 +77,12 @@ const AddProducts = ({history}) => {
               setSpecifications([]);
               setSubCategories(subcat);
               setSubCategory(subcat[0]._id);
-              getSpecifications(subcat[0]._id)
+              getPro(productId);
           }
       }).catch(err =>{
           console.log(err);
       })
-  },[getSpecifications]);
+  },[productId,getPro]);
     const allCats = React.useCallback(() => {
         getCategories().then(data => {
         if(data){
@@ -61,16 +98,7 @@ const AddProducts = ({history}) => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
       allCats();
     }, [allCats])
-    const [category, setCategory] = React.useState("");
-    const [subCategory, setSubCategory] = React.useState("");
-    const [description, setDescription] = React.useState("");
-    const [regPrice, setRegPrice] =React.useState("");
-    const [salePrice, setSalePrice] = React.useState("");
-    const [title, setTitle] = React.useState("");
-    const [quantity, setQuantity] = React.useState("");
-    const [loading, setLoading] = React.useState(false);
-    const [specifications, setSpecifications] = React.useState([]);
-    const [image, setImage] = React.useState([]);
+    
     const types = ["image/jpg", "image/jpeg", "image/png", "image/PNG"];
     const handleProductImg = (e) => {
       let selectedFile = e.target.files[0];
@@ -95,7 +123,7 @@ const AddProducts = ({history}) => {
     };
     const clickSubmit = (event) => {
       event.preventDefault();
-      setLoading(true);
+    //   setLoading(true);
       const specs = [];
       specifications.forEach((spc) => {
         specs.push({
@@ -110,15 +138,15 @@ const AddProducts = ({history}) => {
         mrp:regPrice,
         price:salePrice,
         quantity:quantity, //
-        photos:image, //
+        photo:image, //
         description: description,
         specifications:specs,
         added_by:isAuthenticated().seller._id,
         status:0
       }
-      create(data).then(response => {
+      updateProduct(productId,data).then(response => {
           if(response._id){
-              makeToast("success", response.name+" Created");
+              makeToast("success", response.name+" Updated");
               history.push("/all-products");
           }else{
               makeToast("error", response.error);
@@ -154,12 +182,12 @@ const AddProducts = ({history}) => {
         case "subCategory":
             setSubCategory(event.target.value);
             setSpecifications([]);
-            getSpecifications(event.target.value);
+            getSpecifications(event.target.value,specifications);
             break;
         default:
       }
     };
-
+    
     return (
         <Header>
             {!isAuthenticated() && <Redirect to="/sigin" />}
@@ -302,14 +330,19 @@ const AddProducts = ({history}) => {
             <div style={{display:"flex",flexDirection:'row', flexWrap:'wrap', padding:'10px'}}>
                 {
                   image.map((im) => (
+                    <div style={{display:'flex', flexDirection:'column'}} key={im}>
+                    <DeleteForeverIcon style={{position:'absolute', cursor:"pointer"}} color="secondary" onClick={() => {
+                        let ig = image.filter((ig) => ig!==im);
+                        setImage(ig);
+                    }} />
                     <img
                     src={`${API}/image/photo/${im}`}
                     alt="sourceig"
-                    key={im}
                     style={{padding:'5px'}}
                     height="150px"
                     width="250px"
                   />
+                    </div>
                   ))
                 }
             </div>
@@ -347,4 +380,4 @@ const AddProducts = ({history}) => {
     )
 }
 
-export default withRouter(AddProducts);
+export default withRouter(UpdateProducts);

@@ -1,7 +1,12 @@
 import React, { useState } from "react";
+import { Link, Redirect } from "react-router-dom";
 import classes from "../assets/css/loginPage.module.css";
+import Header from "../components/Header";
+import { authenticate, isAuthenticated, signin } from "../auth/index";
+import { withRouter } from "react-router-dom";
+import makeToast from "../Toaster";
 
-const LoginPage = () => {
+const LoginPage = ({history}) => {
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -16,12 +21,30 @@ const LoginPage = () => {
 
   const submitHandler = (event) => {
       event.preventDefault();
-      console.log(data);
+      signin(data).then(response => {
+        if(response.seller){
+          makeToast("success", "Hi "+response.seller.name);
+        authenticate(response,() => {
+          history.push("/add-products");
+        })
+        }else{
+          makeToast("error",response.err);
+        }
+      }).catch(err => {
+        console.log(err);
+      })
   }
-
+  const redirectIfLogged = () => {
+    if(isAuthenticated()){
+        return (<Redirect to="/all-products" />)
+    }
+}
+  
   return (
-    <div className={classes.container}>
+    <Header>
+      <div className={classes.container}>
       <h3 className={classes.heading}> LOGIN-PAGE </h3>
+      {redirectIfLogged()}
       <form className={classes.form} onSubmit={submitHandler}>
         <div className={classes.field}>
           <label className={classes.label} htmlFor="email">
@@ -52,9 +75,15 @@ const LoginPage = () => {
           ></input>
         </div>
         <button className={classes.button}>Log In</button>
+        <p style={{textDecoration:'none', margin:"8px"}}>
+        <Link to="/register" >
+          I don't have an account! Register Now.
+        </Link>
+        </p>
       </form>
     </div>
+    </Header>
   );
 };
 
-export default LoginPage;
+export default withRouter(LoginPage);

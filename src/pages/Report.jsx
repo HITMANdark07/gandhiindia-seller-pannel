@@ -4,7 +4,7 @@ import Header from '../components/Header'
 const Report = () => {
     return (
         <Header>
-            <h1>Reports</h1>
+            <h1 style={{textAlign:"center"}}>SALE REPORT ANALYSIS</h1>
         </Header>
     )
 }
