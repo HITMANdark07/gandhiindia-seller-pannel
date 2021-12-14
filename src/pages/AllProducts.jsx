@@ -70,7 +70,7 @@ const AllProducts = ({history}) => {
                 </StyledTableCell>
                 <StyledTableCell>{pro.name}</StyledTableCell>
                 <StyledTableCell>
-                  {pro.sold === 0 ? (
+                  {pro.status === 0 ? (
                     <p
                       style={{
                         color: "white",
@@ -96,7 +96,7 @@ const AllProducts = ({history}) => {
                   </p>
                   )}
                 </StyledTableCell>
-                <StyledTableCell>{pro.status}</StyledTableCell>
+                <StyledTableCell>{pro.sold}</StyledTableCell>
                 
                 <StyledTableCell>{pro.price}</StyledTableCell>
                 <StyledTableCell>
