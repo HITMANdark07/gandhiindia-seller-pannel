@@ -19,6 +19,7 @@ const LoginPage = ({history}) => {
     setData({ ...data, [event.target.name]: event.target.value });
   };
 
+  
   const submitHandler = (event) => {
       event.preventDefault();
       signin(data).then(response => {
